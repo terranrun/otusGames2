@@ -12,6 +12,7 @@ public sealed class AttackComponent : MonoBehaviour
 
     [SerializeField]
     private int damage;
+    [SerializeField] private Animation _attackEffect;
 
     public void Attack(GameObject enemy)
     {
@@ -39,6 +40,7 @@ public sealed class AttackComponent : MonoBehaviour
         }
 
         enemy.ApplyDamage(damage);
+        if (_attackEffect) _attackEffect.Play();
         this.OnAttackFinished?.Invoke();
     }
 }

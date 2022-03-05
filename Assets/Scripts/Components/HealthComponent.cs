@@ -25,6 +25,8 @@ public sealed class HealthComponent : MonoBehaviour
 
     [SerializeField]
     private bool isDead;
+
+    [SerializeField] private GameObject _damageEffect;
     private void Start()
     {
         HealthChanged?.Invoke(health);
@@ -32,7 +34,10 @@ public sealed class HealthComponent : MonoBehaviour
     public void ApplyDamage(int damage)
     {
         health -= damage;
+        
+
         HealthChanged?.Invoke(health);
+        ShowDamageEffect();
         if (health <= 0)
         {
             isDead = true;
@@ -55,5 +60,15 @@ public sealed class HealthComponent : MonoBehaviour
         }
 
         OnHealthChanged?.Invoke(health);
+    }
+
+    public void ShowDamageEffect()
+    {
+        if (!_damageEffect) return;
+        
+        foreach (var effect in _damageEffect.GetComponentsInChildren<ParticleSystem>())
+        {
+            effect.Play();
+        }
     }
 }

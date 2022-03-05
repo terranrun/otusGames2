@@ -7,6 +7,7 @@ public class MenuController : MonoBehaviour
 {
     enum Screen
     {
+        None,
         Main,
         Settings,
         LoadLVL,
@@ -36,7 +37,9 @@ public class MenuController : MonoBehaviour
     
     public void StartNewGame()
     {
-        SceneManager.LoadScene("Game");
+        SetCurrentScreen(Screen.None);
+        LoadingScreen.instance.LoadScene("Game");
+        
     }
     public void OpenLoad()
     {

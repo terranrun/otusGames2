@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Components;
 using DefaultNamespace;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class CharacterComponent : MonoBehaviour, IDisposable
     public float distanceFromEnemy;
     Vector3 originalPosition;
     Quaternion originalRotation;
-    private static readonly int Dead = Animator.StringToHash("Dead");
+    private static readonly int Death = Animator.StringToHash("Death");
     private static readonly int Speed = Animator.StringToHash("Speed");
 
     void Start()
@@ -49,7 +50,9 @@ public class CharacterComponent : MonoBehaviour, IDisposable
 
     private void OnDead()
     {
-        animator.SetFloat(Dead, runSpeed);
+        animator.SetFloat(Death, runSpeed);// не понимаю как это работает 
+        animator.SetTrigger("Death");
+        StartCoroutine("Dead");
     }
 
     private void OnDestroy()
@@ -102,6 +105,20 @@ public class CharacterComponent : MonoBehaviour, IDisposable
                 state = State.BeginShoot;
                 break;
         }
+    }
+
+    private IEnumerator Dead()// исчезновение персонажа после смерти
+    {
+        float time = 0;
+        while (time <= 3)
+        {
+            
+            time += Time.deltaTime;
+            transform.Translate(0,1* -Time.deltaTime, 0);
+            yield return new WaitForSeconds(0.1f);
+        }
+       // Destroy(gameObject); теряет его из списка 
+        gameObject.SetActive(false);
     }
 
     bool RunTowards(Vector3 targetPosition, float distanceFromTarget)
@@ -167,7 +184,7 @@ public class CharacterComponent : MonoBehaviour, IDisposable
                 state = State.Shoot;
                 break;
 
-            case State.Shoot:
+            case State.Shoot:                
                 break;
         }
     }

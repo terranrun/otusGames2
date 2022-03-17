@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 public sealed class HealthComponent : MonoBehaviour
 {
+    [SerializeField] private string playSoundHit;
+    [SerializeField] private string playSoundDie;
+    [SerializeField] private PlaySound _playSoundHitAndDie;
     public Action<int> OnHealthChanged;
     public event UnityAction<float> HealthChanged;
 
@@ -37,9 +40,11 @@ public sealed class HealthComponent : MonoBehaviour
         
 
         HealthChanged?.Invoke(health);
+        _playSoundHitAndDie.PlaySoundEffect(playSoundHit);
         ShowDamageEffect();
         if (health <= 0)
         {
+            _playSoundHitAndDie.PlaySoundEffect(playSoundDie);
             isDead = true;
             health = 0;
             OnDead?.Invoke();

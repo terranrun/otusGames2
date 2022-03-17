@@ -13,6 +13,8 @@ public sealed class AttackComponent : MonoBehaviour
     [SerializeField]
     private int damage;
     [SerializeField] private Animation _attackEffect;
+    [SerializeField] private PlaySound _playSound;
+    [SerializeField] private string playSoundName;
 
     public void Attack(GameObject enemy)
     {
@@ -41,6 +43,7 @@ public sealed class AttackComponent : MonoBehaviour
 
         enemy.ApplyDamage(damage);
         if (_attackEffect) _attackEffect.Play();
+        if (_playSound) _playSound.PlaySoundEffect(playSoundName);
         this.OnAttackFinished?.Invoke();
     }
 }

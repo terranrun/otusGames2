@@ -8,11 +8,14 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private CharacterComponent[] playerCharacters;
     [SerializeField] private CharacterComponent[] enemyCharacters;
+    [SerializeField] private PlaySound _playSoundWinOrLose;
+    [SerializeField] private string playSoundWin;
+    [SerializeField] private string playSoundLose;
     [SerializeField] private LoadController _loadController;
     [SerializeField] private TMP_Text WinOrLoseText;
 
     private Coroutine gameLoop;
-    private bool waitingForInput;
+    private bool waitingForInput ;
     private CharacterComponent currentTarget;
     
 
@@ -75,6 +78,7 @@ public class GameController : MonoBehaviour
             Debug.Log("Victory");
             _loadController.PauseMenuPanel();
             WinOrLoseText.text = "Victory";
+            _playSoundWinOrLose.PlaySoundEffect(playSoundWin);
 
 
         }
@@ -83,6 +87,7 @@ public class GameController : MonoBehaviour
             Debug.Log("game over");
             _loadController.PauseMenuPanel();
             WinOrLoseText.text = "game over";
+            _playSoundWinOrLose.PlaySoundEffect(playSoundLose);
         }
         
 
@@ -103,6 +108,7 @@ public class GameController : MonoBehaviour
 
                 while (waitingForInput)
                 {
+                    Debug.Log("ddddddddddd");
                     yield return null;
                 }
 
@@ -111,15 +117,17 @@ public class GameController : MonoBehaviour
                     Debug.Log("Character: " + player.name + " is dead");
                     continue;
                 }
-
+                
                 player.SetTarget(currentTarget.HealthComponent);
 
                 //TODO: hotfix
                 yield return null; // ugly fix need to investigate
                 player.StartTurn();
+                
                 yield return new WaitUntilCharacterAttack(player);
 
                 Debug.Log("Character: " + player.name + " finished turn");
+               
                 waitingForInput = true;
                 currentTarget.IndicatorComponent.DisableTargetIndicator();
                 currentTarget = null;

@@ -20,6 +20,7 @@ public class HealthBar : MonoBehaviour
     private void OnDisable()
     {
         _healthComponent.HealthChanged -= OnHealthChange;
+       
     }
 
     private void OnHealthChange(float value)
